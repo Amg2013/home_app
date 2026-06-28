@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils/app_assets.dart';
+import 'package:flutter_application_1/core/utils/app_assets.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  final String userName;
+  final String userEmail;
+  //
+  SettingScreen({super.key, required this.userName, required this.userEmail});
+
+  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.canPop(context);
+            },
+          ),
+        ],
+        title: Text(userName),
         leading: Icon(Icons.menu),
       ),
       body: Padding(
@@ -16,11 +29,36 @@ class SettingScreen extends StatelessWidget {
             child: Column(
               children: [
                 // this is for profile image and edit button
+                Text(
+                  userName,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  userEmail,
+                ),
+                SizedBox(height: 16.0),
                 gerennContainerForImage(),
                 SizedBox(height: 16.0),
                 decortionContainer(width: 400, height: 200),
                 SizedBox(height: 16.0),
-                decortionContainer(width: 400, height: 400),
+                decortionContainer(width: 400, height: 400, children: [
+                  buildSettingOption(
+                    'Account',
+                    Icons.person,
+                    null,
+                  ),
+                  buildSettingOption(
+                    'Notifications',
+                    Icons.notifications,
+                    null,
+                  ),
+                  buildSettingOption(
+                    'Privacy',
+                    Icons.lock,
+                    null,
+                  ),
+                ]),
 
                 ///
               ],
@@ -32,7 +70,7 @@ class SettingScreen extends StatelessWidget {
 /////////////////////////////////////////////widgts functinos ////////////////
 ////////////////////////////////////////////////////////////////////////
 
-  Widget buildSettingOption(String title, IconData icon, VoidCallback onTap) {
+  Widget buildSettingOption(String title, IconData icon, VoidCallback? onTap) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[300],
@@ -78,7 +116,8 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget decortionContainer({required double width, required double height}) {
+  Widget decortionContainer(
+      {required double width, required double height, List<Widget>? children}) {
     return Container(
         width: width,
         height: height,
@@ -88,17 +127,10 @@ class SettingScreen extends StatelessWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildSettingOption('Account', Icons.person, () {
-              // Handle Account option tap
-            }),
-            buildSettingOption('Account', Icons.person, () {
-              // Handle Account option tap
-            }),
-            buildSettingOption('Account', Icons.person, () {
-              // Handle Account option tap
-            }),
-          ],
+          children: children ??
+              [
+                Icon(Icons.settings, size: 50),
+              ],
         ));
   }
 }
